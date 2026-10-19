@@ -53,11 +53,11 @@ def fit_size(draw, text, path, weight, start, max_w):
     return size
 
 
-def background(glow):
+def background(glow, cy=780):
     """Negro absoluto con un halo de luz muy suave del color de la fragancia."""
     bg = Image.new("RGB", (W, H), NEGRO)
     halo = Image.new("L", (W, H), 0)
-    ImageDraw.Draw(halo).ellipse((W / 2 - 430, 380, W / 2 + 430, 1180), fill=255)
+    ImageDraw.Draw(halo).ellipse((W / 2 - 430, cy - 400, W / 2 + 430, cy + 400), fill=255)
     halo = halo.filter(ImageFilter.GaussianBlur(170))
     tint = Image.new("RGB", (W, H), glow)
     return Image.composite(tint, bg, halo.point(lambda v: int(v * 0.16)))
@@ -71,16 +71,16 @@ def bottle(src, target_h):
     return im.resize((round(im.width * scale), target_h), Image.LANCZOS)
 
 
-def bottle_layer(b, scale, cy):
+def bottle_layer(b, scale, cy, cx=W // 2):
     """Frasco + sombra de contacto + reflejo tenue, centrados en el lienzo."""
     if scale != 1:
         b = b.resize((round(b.width * scale), round(b.height * scale)), Image.LANCZOS)
     layer = Image.new("RGBA", (W, H), (0, 0, 0, 0))
-    x, y = (W - b.width) // 2, cy - b.height // 2
+    x, y = cx - b.width // 2, cy - b.height // 2
     base = y + b.height
 
     shadow = Image.new("L", (W, H), 0)
-    ImageDraw.Draw(shadow).ellipse((W / 2 - b.width * 0.42, base - 18, W / 2 + b.width * 0.42, base + 22), fill=150)
+    ImageDraw.Draw(shadow).ellipse((cx - b.width * 0.42, base - 18, cx + b.width * 0.42, base + 22), fill=150)
     shadow = shadow.filter(ImageFilter.GaussianBlur(22))
     layer = Image.composite(Image.new("RGBA", (W, H), (0, 0, 0, 255)), layer, shadow)
 
@@ -93,15 +93,15 @@ def bottle_layer(b, scale, cy):
     return layer
 
 
-def text_layer(p, fonts):
-    layer = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+def text_layer(p, fonts, y=1352, max_w=W - 2 * 110, cx=W / 2, size=76, layer=None):
+    layer = layer or Image.new("RGBA", (W, H), (0, 0, 0, 0))
     d = ImageDraw.Draw(layer)
     josefin, arimo = fonts
-    size = fit_size(d, p["nombre"], josefin, 700, 76, W - 2 * 110)
-    casa = font(arimo, 30, 400)
-    draw_tracked(d, W / 2, 1352, p["casa"], casa, CHAMPAGNE, tracking=0.32)
-    d.line((W / 2 - 36, 1408, W / 2 + 36, 1408), fill=CHAMPAGNE, width=2)
-    draw_tracked(d, W / 2, 1436, p["nombre"], font(josefin, size, 700), HUESO)
+    size = fit_size(d, p["nombre"], josefin, 700, size, max_w)
+    casa = font(arimo, round(size * 0.4), 400)
+    draw_tracked(d, cx, y, p["casa"], casa, CHAMPAGNE, tracking=0.32)
+    d.line((cx - 36, y + size * 0.74, cx + 36, y + size * 0.74), fill=CHAMPAGNE, width=2)
+    draw_tracked(d, cx, y + size * 1.11, p["nombre"], font(josefin, size, 700), HUESO)
     return layer
 
 

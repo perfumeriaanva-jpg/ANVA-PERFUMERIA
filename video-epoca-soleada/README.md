@@ -2,8 +2,20 @@
 
 ## Estado
 
-- **Listo:** tarjetas e insertos animados de los tres perfumes, con la identidad de ANVA.
-- **Pendiente:** el video en crudo. Está en Google Drive y el entorno de trabajo no tiene acceso a `drive.google.com`. Sin ese archivo no hay cortes, subtítulos ni tiempos: no se inventó ninguno.
+**Reel editado:** `anva-epoca-soleada.mp4` (1080×1920, H.264, 30 fps, 40,6 s).
+
+- **Cortes:** se quita el "Hola, ¿cómo están?" y se abre directamente con "Les voy a recomendar rápidamente…". Las pausas entre frases se acortan a unos 0,15 s y el encuadre alterna (100 % / 107 %) en cada corte para que los saltos no se noten.
+- **Gancho:** "TEMPORADA DE CALOR · 2 PERFUMES ÁRABES", tomado de la primera frase.
+- **Perfumes:**
+  - Inserto N.º 1 Amber Oud Aqua Dubai cuando se nombra.
+  - Comparación con Imagination de Louis Vuitton cuando se dice que lo "dupea".
+  - Inserto N.º 2 Hawas Ice.
+  - Cierre "¿Con cuál te quedas?" con los dos recomendados.
+- **Subtítulos:** transcritos y corregidos. Arimo en blanco hueso; los nombres van en Josefin Sans Bold y los conceptos dichos (calor, fresco y jabonoso, dura bastante, fresco, dulzón) en champagne.
+- **Audio:** voz limpia y normalizada a -14 LUFS. Base musical original (`tools/make_music.py`) unos 21 dB por debajo de la voz, con ducking.
+- **Versión sin música:** existe una exportación solo con voz, para usar un audio con licencia de la biblioteca de Instagram o TikTok.
+
+Para regenerarlo: `python3 tools/render_reel.py <crudo.mov> <fuentes> fotos <musica.wav> <salida>`. La transcripción se hizo con Whisper turbo y Parakeet v3 (sherpa-onnx, `tools/transcribe.py`).
 
 ## Perfumes identificados (según la etiqueta de cada foto)
 
